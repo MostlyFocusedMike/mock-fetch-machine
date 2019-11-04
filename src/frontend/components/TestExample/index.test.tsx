@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, fireEvent, cleanup, getByText, findByText, waitForElement, act } from '@testing-library/react';
 import TestExample from '.';
-import {setDefaultRoutes, overrideRoute, resetFetch, rejectRoute} from '../../mock-fetch-machine';
+import {setDefaultRoutes, overrideRoute, resetFetch, rejectRoute, mockOnce} from '../../mock-fetch-machine';
 
 describe('Fetch mock tests', () => {
 
@@ -9,7 +9,6 @@ describe('Fetch mock tests', () => {
         setDefaultRoutes();
     });
     const setup = () => {
-        // fetchMachine();
         const utils = render(<TestExample />);
         return {
             ...utils,
@@ -26,10 +25,9 @@ describe('Fetch mock tests', () => {
 
     it('runs and catches overrid', async () => {
         overrideRoute('TestAdapter', 'getOne', {msg: 'test 2 override'})
-        const { getByText, debug } = setup();
+        const { getByText } = setup();
         await waitForElement(() => getByText(/test 2 override/));
         expect(getByText('Hello test')).toBeTruthy();
-        debug();
     });
 
     it('runs back with defaults', async () => {
@@ -51,4 +49,11 @@ describe('Fetch mock tests', () => {
         expect(getByText('Hello test')).toBeTruthy();
     });
 
+    it('mocks once', async () => {
+        mockOnce({msg: 'oh wow'})
+        const { getByText, debug, findByText} = setup();
+        await waitForElement(() => getByText(/oh wow/));
+        expect(getByText('Hello test')).toBeTruthy();
+        debug();
+    });
 });

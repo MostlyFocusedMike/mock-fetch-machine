@@ -19,10 +19,26 @@ export const setDefaultRoutes = () => {
     Object.values(mockAdapters).forEach(mockAdapter => {
         Object.values(mockAdapter).forEach((properties) => {
             const { route, response, method, status } = {...defaultOpts, ...properties}
-            fetchMock.mock(route, {body: response, status}, { method }); // success
+            fetchMock.mock(route, {body: response, status}, { method });
         })
     })
 };
+
+/**
+ * Mock literally any route but only once
+ *
+ * @param newResponse - overide response value
+ * @param status - new server status code
+ * @param method - http verb
+ */
+export const mockOnce = (
+    newResponse: any,
+    status = defaultOpts.status,
+    method = defaultOpts.method,
+) => {
+    fetchMock.reset();
+    fetchMock.once('*', {body: newResponse, status}, { method });
+}
 
 /**
  * Override a single adapter function for a single test

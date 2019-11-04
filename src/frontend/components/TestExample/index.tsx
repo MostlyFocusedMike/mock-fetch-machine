@@ -10,12 +10,9 @@ const TestExample: React.FC = () => {
     const [test1, setTest1] = useState<{msg: string} | null>(null);
     useEffect(() => {
         TestAdapter.getOne()
-            .then((res) => {
-                console.log('res: ', res);
-                setTest1(res);
-            })
+            .then(setTest1)
             .catch((e) => {
-                console.log('e here')
+                console.log('Error handled')
             });
     }, []);
 
