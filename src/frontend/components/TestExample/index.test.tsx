@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, fireEvent, cleanup, getByText, findByText, waitForElement, act } from '@testing-library/react';
 import TestExample from '.';
-import {setDefaultRoutes, overrideRoute, resetFetch, rejectRoute} from './fetchMachine';
+import {setDefaultRoutes, overrideRoute, resetFetch, rejectRoute} from '../../mock-fetch-machine';
 
 describe('Fetch mock tests', () => {
 

@@ -1,4 +1,3 @@
-
 interface MockAdaptersIntf {
     [ key: string ]: {
         [ key: string ]: {
