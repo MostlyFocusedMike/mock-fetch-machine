@@ -1,5 +1,5 @@
+import fetchMock from 'fetch-mock';
 import mockAdapters from './mockAdapters';
-const fetchMock = require('fetch-mock');
 
 const defaultOpts = {
     status: 200,
@@ -9,7 +9,7 @@ const defaultOpts = {
 // place any fetch-mock configs in this method
 const initFetchMachine = () => {
     fetchMock.config.overwriteRoutes = true;
-}
+};
 
 /**
  * Run through and register all the routes from the mock adapters
@@ -18,10 +18,15 @@ export const setDefaultRoutes = () => {
     initFetchMachine();
     Object.values(mockAdapters).forEach(mockAdapter => {
         Object.values(mockAdapter).forEach((properties) => {
-            const { route, response, method, status } = {...defaultOpts, ...properties}
-            fetchMock.mock(route, {body: response, status}, { method });
-        })
-    })
+            const {
+                route,
+                response,
+                method,
+                status,
+            } = { ...defaultOpts, ...properties };
+            fetchMock.mock(route, { body: response, status }, { method });
+        });
+    });
 };
 
 /**
@@ -37,8 +42,8 @@ export const mockOnce = (
     method = defaultOpts.method,
 ) => {
     fetchMock.reset();
-    fetchMock.once('*', {body: newResponse, status}, { method });
-}
+    fetchMock.once('*', { body: newResponse, status }, { method });
+};
 
 /**
  * Override a single adapter function for a single test
@@ -56,9 +61,9 @@ export const overrideRoute = (
     status = defaultOpts.status,
     method = defaultOpts.method,
 ) => {
-    const route = mockAdapters[mockAdapter][adapterFunction].route;
-    fetchMock.mock(route, {body: newResponse, status}, { method });
-}
+    const { route } = mockAdapters[mockAdapter][adapterFunction];
+    fetchMock.mock(route, { body: newResponse, status }, { method });
+};
 
 /**
  * Break a single route with an unhandled error,
@@ -71,9 +76,9 @@ export const rejectRoute = (
     mockAdapter: string,
     adapterFunction: string,
 ) => {
-    const route = mockAdapters[mockAdapter][adapterFunction].route;
-    fetchMock.mock(route, {throws: new TypeError('failed to fetch')});
-}
+    const { route } = mockAdapters[mockAdapter][adapterFunction];
+    fetchMock.mock(route, { throws: new TypeError('failed to fetch') });
+};
 
 // reset fetch to default behavior
 export const resetFetch = () => fetchMock.reset();

@@ -39,6 +39,9 @@ module.exports = {
         'no-underscore-dangle': 'off',
     },
     settings: {
+        react: {
+            version: 'detect',
+        },
         'import/extensions': ['.js','.jsx','.ts','.tsx'],
         'import/parsers': {
           '@typescript-eslint/parser': ['.ts','.tsx']
