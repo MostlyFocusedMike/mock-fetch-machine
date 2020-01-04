@@ -1,27 +1,27 @@
+type urlTp = string;
+
+interface mockReturnValueIntf {
+    body: any;
+    code?: number;
+    method?: string;
+}
+
+type routeTuple = [
+    urlTp,
+    mockReturnValueIntf
+]
+
 interface MockAdaptersIntf {
     [ key: string ]: {
-        [ key: string ]: {
-            route: string;
-            response: any;
-            method?: string;
-            status?: number;
-            errors: any;
-        }
+        [ key: string ]: routeTuple[];
     }
 }
 
-const mockAdapters: MockAdaptersIntf = {
+const mockAdapters = {
     TestAdapter: {
-        getOne: {
-            route: '/test/1',
-            response: { msg: 'test 1 val' },
-            errors: {
-                404: {
-                    message: 'Resource is missing',
-                    title: 'Not Found',
-                },
-            },
-        },
+        getOne: [
+            ['/test/1', { body: { msg: 'test 1 val' } }],
+        ],
     },
 };
 
