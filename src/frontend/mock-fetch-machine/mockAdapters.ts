@@ -18,9 +18,9 @@ const mockAdapters: MockAdaptersIntf = {
             errors: {
                 404: {
                     message: 'Resource is missing',
-                    title: 'Not Found'
-                }
-            }
+                    title: 'Not Found',
+                },
+            },
         },
     },
 };
