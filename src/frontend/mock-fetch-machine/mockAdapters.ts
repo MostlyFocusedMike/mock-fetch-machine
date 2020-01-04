@@ -1,21 +1,4 @@
-type urlTp = string;
-
-interface mockReturnValueIntf {
-    body: any;
-    code?: number;
-    method?: string;
-}
-
-type routeTuple = [
-    urlTp,
-    mockReturnValueIntf
-]
-
-interface MockAdaptersIntf {
-    [ key: string ]: {
-        [ key: string ]: routeTuple[];
-    }
-}
+import { MockAdaptersIntf } from './types'; // eslint-disable-line no-unused-vars
 
 const mockAdapters: MockAdaptersIntf = {
     TestAdapter: {

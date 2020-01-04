@@ -1,33 +1,43 @@
 import fetchMock from 'fetch-mock';
 import mockAdapters from './mockAdapters';
+import {
+    // urlTp,
+    // mockReturnValueIntf,
+    // MockAdaptersIntf,
+    RouteTupleT, // eslint-disable-line no-unused-vars
+} from './types';
 
 const defaultOpts = {
     code: 200,
     method: 'GET',
 };
 
-// place any fetch-mock configs in this method
-const initFetchMachine = () => {
-    fetchMock.config.overwriteRoutes = true;
+/** place any fetch-mock configs in this method */
+const setFetchMachineConfigs = () => {
+    fetchMock.config.overwriteRoutes = true; // only config that's *required*
 };
 
-/**
- * Run through and register all the routes from the mock adapters
- */
-export const setDefaultRoutes = () => {
-    initFetchMachine();
-    Object.values(mockAdapters).forEach(mockAdapter => {
-        Object.values(mockAdapter).forEach((methodRoutes) => {
-            methodRoutes.forEach(routeTuple => {
-                const [url, mockReturnValue] = routeTuple;
-                const { body, code, method } = {
-                    ...defaultOpts,
-                    ...mockReturnValue,
-                };
-                fetchMock.mock(url, { body, status: code }, { method });
-            });
-        });
+const createRoutesFromTuples = (routeTuples: RouteTupleT[]) => {
+    routeTuples.forEach(routeTuple => {
+        const [url, mockReturnValue] = routeTuple;
+        const { body, code, method } = {
+            ...defaultOpts,
+            ...mockReturnValue,
+        };
+        fetchMock.mock(url, { body, status: code }, { method });
     });
+};
+
+const setDefaultRoutes = () => {
+    Object.values(mockAdapters).forEach(mockAdapter => {
+        Object.values(mockAdapter).forEach(createRoutesFromTuples);
+    });
+};
+
+/** Initialize fetch machine with configs and default routes */
+export const startFetchMachine = () => {
+    setFetchMachineConfigs();
+    setDefaultRoutes();
 };
 
 // /**

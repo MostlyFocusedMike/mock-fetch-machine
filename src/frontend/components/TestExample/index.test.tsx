@@ -5,7 +5,7 @@ import {
 } from '@testing-library/react';
 import TestExample from '.';
 import {
-    setDefaultRoutes,
+    startFetchMachine,
     // overrideRoute,
     resetFetch,
     // rejectRoute,
@@ -14,7 +14,7 @@ import {
 
 describe('Fetch mock tests', () => {
     beforeEach(() => {
-        setDefaultRoutes();
+        startFetchMachine();
     });
 
     afterEach(resetFetch);
