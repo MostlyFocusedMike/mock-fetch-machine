@@ -32,7 +32,7 @@ describe('Fetch mock tests', () => {
         expect(getByText('Hello test')).toBeTruthy();
     });
 
-    it('runs and catches overrid', async () => {
+    it('runs and catches override', async () => {
         overrideRoute('TestAdapter', 'getOne', { msg: 'test 2 override' });
         const { getByText } = setup();
         await waitForElement(() => getByText(/test 2 override/));
