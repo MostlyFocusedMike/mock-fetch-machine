@@ -26,12 +26,18 @@ describe('Fetch mock tests', () => {
         expect(getByText('Hello test')).toBeTruthy();
     });
 
-    // it('runs and catches override', async () => {
-    //     overrideRoute('TestAdapter', 'getOne', { msg: 'test 2 override' });
-    //     const { getByText } = setup();
-    //     await waitForElement(() => getByText(/test 2 override/));
-    //     expect(getByText('Hello test')).toBeTruthy();
-    // });
+    it('runs and catches override', async () => {
+        FetchMachine.changeRoute('TestAdapter', 'getOne', { body: { msg: 'test 2 override' } });
+        const { getByText } = setup();
+        await waitForElement(() => getByText(/test 2 override/));
+        expect(getByText('Hello test')).toBeTruthy();
+    });
+
+    it('runs back with defaults', async () => {
+        const { getByText } = setup();
+        await waitForElement(() => getByText(/test 1/));
+        expect(getByText('Hello test')).toBeTruthy();
+    });
 
     it('mocks once', async () => {
         FetchMachine.mockAnyOnce({ msg: 'oh wow' });
@@ -47,15 +53,9 @@ describe('Fetch mock tests', () => {
         expect(getByText('Hello test')).toBeTruthy();
     });
 
-    // it('catches errors', async () => {
-    //     rejectRoute('TestAdapter', 'getOne');
-    //     const { getByText } = setup();
-    //     expect(getByText('Hello test')).toBeTruthy();
-    // });
-
-    // it('runs back with defaults again', async () => {
-    //     const { getByText } = setup();
-    //     await waitForElement(() => getByText(/test 1/));
-    //     expect(getByText('Hello test')).toBeTruthy();
-    // });
+    it('catches errors', async () => {
+        FetchMachine.rejectRoute('TestAdapter', 'getOne');
+        const { getByText } = setup();
+        expect(getByText('Hello test')).toBeTruthy();
+    });
 });

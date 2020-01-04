@@ -6,6 +6,11 @@ import {
     defaultOptsIntf,  // eslint-disable-line no-unused-vars
 } from './types';
 
+interface NewResponseIntf {
+    body?: any,
+    status?: number,
+    method?: string,
+}
 
 class FetchMachine {
     mockAdapters: MockAdaptersIntf;
@@ -61,59 +66,55 @@ class FetchMachine {
         fetchMock.once('*', { body, status }, { method });
     };
 
+    /**
+     * Override a single adapter function for a single test
+     *
+     * @param mockAdapter - Name of the fake adapter
+     * @param adapterFunction - Name of the method to override
+     * @param newResponse - overide response value
+     * @param status - new server status code
+     * @param method - http verb
+     */
+    changeRoute = (
+        mockAdapter: string,
+        adapterFunction: string,
+        newResponse: NewResponseIntf = {
+            body: {},
+            status: 200,
+            method: 'GET',
+        },
+        routeIdx = 0,
+    ) => {
+        const [url, oldResponse] = rawMockAdapters[mockAdapter][adapterFunction][routeIdx];
+        fetchMock.mock(
+            url,
+            {
+                body: newResponse.body || oldResponse.body,
+                status: newResponse.status || oldResponse.status,
+            },
+            {
+                method: newResponse.method || oldResponse.method,
+            },
+        );
+    };
+
+    /**
+     * Break a single route with an unhandled error,
+     * will break render test if app doesn't handle rejected promises
+     *
+     * @param mockAdapter - Name of the adapter
+     * @param adapterFunction - Name of the function
+     */
+    rejectRoute = (
+        mockAdapter: string,
+        adapterFunction: string,
+        routeIdx = 0,
+    ) => {
+        const [url]= rawMockAdapters[mockAdapter][adapterFunction][routeIdx];
+        fetchMock.mock(url, { throws: new TypeError('failed to fetch') });
+    };
+
     reset = () => fetchMock.reset();
 }
-
-// /**
-//  * Mock literally any route but only once
-//  *
-//  * @param newResponse - overide response value
-//  * @param status - new server status code
-//  * @param method - http verb
-//  */
-// export const mockOnce = (
-//     newResponse: any,
-//     status = defaultOpts.status,
-//     method = defaultOpts.method,
-// ) => {
-//     fetchMock.reset();
-//     fetchMock.once('*', { body: newResponse, status }, { method });
-// };
-
-// /**
-//  * Override a single adapter function for a single test
-//  *
-//  * @param mockAdapter -Name of the fake adapter
-//  * @param adapterFunction - Name of the method to override
-//  * @param newResponse - overide response value
-//  * @param status - new server status code
-//  * @param method - http verb
-//  */
-// export const overrideRoute = (
-//     mockAdapter: string,
-//     adapterFunction: string,
-//     newResponse: any,
-//     status = defaultOpts.status,
-//     method = defaultOpts.method,
-// ) => {
-//     const { route } = rawMockAdapters[mockAdapter][adapterFunction];
-//     fetchMock.mock(route, { body: newResponse, status }, { method });
-// };
-
-// /**
-//  * Break a single route with an unhandled error,
-//  * will break render test if app doesn't handle rejected promises
-//  *
-//  * @param mockAdapter - Name of the adapter
-//  * @param adapterFunction - Name of the function
-//  */
-// export const rejectRoute = (
-//     mockAdapter: string,
-//     adapterFunction: string,
-//     routeNumber = 0,
-// ) => {
-//     const { routes } = rawMockAdapters[mockAdapter][adapterFunction];
-//     fetchMock.mock(routes, { throws: new TypeError('failed to fetch') });
-// };
 
 export default new FetchMachine(rawMockAdapters);

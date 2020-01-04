@@ -2,7 +2,7 @@ type urlTp = string;
 
 interface mockReturnValueIntf {
     body: any;
-    code?: number;
+    status?: number;
     method?: string;
 }
 
