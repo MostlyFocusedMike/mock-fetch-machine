@@ -110,7 +110,7 @@ class FetchMachine {
         adapterFunction: string,
         routeIdx = 0,
     ) => {
-        const [url]= rawMockAdapters[mockAdapter][adapterFunction][routeIdx];
+        const [url] = rawMockAdapters[mockAdapter][adapterFunction][routeIdx];
         fetchMock.mock(url, { throws: new TypeError('failed to fetch') });
     };
 

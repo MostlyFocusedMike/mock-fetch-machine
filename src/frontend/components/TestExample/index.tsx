@@ -13,6 +13,7 @@ const TestExample: React.FC = () => {
             .then(setTest1)
             .catch((e) => {
                 console.log('Error handled');
+                setTest1({ msg: 'error ok'});
             });
     }, []);
 

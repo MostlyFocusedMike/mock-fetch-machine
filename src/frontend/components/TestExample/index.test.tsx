@@ -41,10 +41,9 @@ describe('Fetch mock tests', () => {
 
     it('mocks once', async () => {
         FetchMachine.mockAnyOnce({ msg: 'oh wow' });
-        const { getByText, debug } = setup();
+        const { getByText } = setup();
         await waitForElement(() => getByText(/oh wow/));
         expect(getByText('Hello test')).toBeTruthy();
-        debug();
     });
 
     it('runs back with defaults', async () => {
@@ -55,7 +54,9 @@ describe('Fetch mock tests', () => {
 
     it('catches errors', async () => {
         FetchMachine.rejectRoute('TestAdapter', 'getOne');
-        const { getByText } = setup();
+        const { getByText, debug } = setup();
+        await waitForElement(() => getByText(/error ok/));
         expect(getByText('Hello test')).toBeTruthy();
+        debug();
     });
 });
