@@ -5,6 +5,7 @@ interface MockAdaptersIntf {
             response: any;
             method?: string;
             status?: number;
+            errors: any;
         }
     }
 }
@@ -14,6 +15,12 @@ const mockAdapters: MockAdaptersIntf = {
         getOne: {
             route: '/test/1',
             response: { msg: 'test 1 val' },
+            errors: {
+                404: {
+                    message: 'Resource is missing',
+                    title: 'Not Found'
+                }
+            }
         },
     },
 };
