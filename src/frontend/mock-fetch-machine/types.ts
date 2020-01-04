@@ -6,13 +6,18 @@ interface mockReturnValueIntf {
     method?: string;
 }
 
-export type RouteTupleT = [
+export type RouteTupleType = [
     urlTp,
     mockReturnValueIntf
 ]
 
 export interface MockAdaptersIntf {
     [ key: string ]: {
-        [ key: string ]: RouteTupleT[];
+        [ key: string ]: RouteTupleType[];
     }
+}
+
+export interface defaultOptsIntf {
+    status: number,
+    method: string,
 }

@@ -37,6 +37,8 @@ module.exports = {
         'import/prefer-default-export': 'off',
         'arrow-parens': 'off',
         'no-underscore-dangle': 'off',
+        'lines-between-class-members': 'off',
+        'no-multi-spaces': ["error", { ignoreEOLComments: true }]
     },
     settings: {
         react: {

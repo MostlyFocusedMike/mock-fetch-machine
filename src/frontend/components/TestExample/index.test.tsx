@@ -4,20 +4,14 @@ import {
     waitForElement,
 } from '@testing-library/react';
 import TestExample from '.';
-import {
-    startFetchMachine,
-    // overrideRoute,
-    resetFetch,
-    // rejectRoute,
-    // mockOnce,
-} from '../../mock-fetch-machine';
+import FetchMachine from '../../mock-fetch-machine';
 
 describe('Fetch mock tests', () => {
     beforeEach(() => {
-        startFetchMachine();
+        FetchMachine.init();
     });
 
-    afterEach(resetFetch);
+    afterEach(FetchMachine.reset);
 
     const setup = () => {
         const utils = render(<TestExample />);
@@ -39,12 +33,19 @@ describe('Fetch mock tests', () => {
     //     expect(getByText('Hello test')).toBeTruthy();
     // });
 
-    // it('runs back with defaults', async () => {
-    //     const { getByText } = setup();
-    //     await waitForElement(() => getByText(/test 1/));
-    //     expect(getByText('Hello test')).toBeTruthy();
-    // });
+    it('mocks once', async () => {
+        FetchMachine.mockAnyOnce({ msg: 'oh wow' });
+        const { getByText, debug } = setup();
+        await waitForElement(() => getByText(/oh wow/));
+        expect(getByText('Hello test')).toBeTruthy();
+        debug();
+    });
 
+    it('runs back with defaults', async () => {
+        const { getByText } = setup();
+        await waitForElement(() => getByText(/test 1/));
+        expect(getByText('Hello test')).toBeTruthy();
+    });
 
     // it('catches errors', async () => {
     //     rejectRoute('TestAdapter', 'getOne');
@@ -56,13 +57,5 @@ describe('Fetch mock tests', () => {
     //     const { getByText } = setup();
     //     await waitForElement(() => getByText(/test 1/));
     //     expect(getByText('Hello test')).toBeTruthy();
-    // });
-
-    // it('mocks once', async () => {
-    //     mockOnce({ msg: 'oh wow' });
-    //     const { getByText, debug } = setup();
-    //     await waitForElement(() => getByText(/oh wow/));
-    //     expect(getByText('Hello test')).toBeTruthy();
-    //     debug();
     // });
 });
