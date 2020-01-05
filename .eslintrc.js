@@ -38,7 +38,8 @@ module.exports = {
         'arrow-parens': 'off',
         'no-underscore-dangle': 'off',
         'lines-between-class-members': 'off',
-        'no-multi-spaces': ["error", { ignoreEOLComments: true }]
+        'no-multi-spaces': ["error", { ignoreEOLComments: true }],
+        'import/extensions': 0,
     },
     settings: {
         react: {

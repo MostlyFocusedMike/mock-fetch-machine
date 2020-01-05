@@ -46,16 +46,24 @@ describe('Fetch mock tests', () => {
         expect(getByText('Hello test')).toBeTruthy();
     });
 
-    it('runs back with defaults', async () => {
+    it.only('runs back with defaults', async () => {
         const { getByText } = setup();
         await waitForElement(() => getByText(/test 1/));
         expect(getByText('Hello test')).toBeTruthy();
     });
 
-    it('catches errors', async () => {
+    it('catches rejections', async () => {
         FetchMachine.rejectRoute('TestAdapter', 'getOne');
         const { getByText, debug } = setup();
         await waitForElement(() => getByText(/error ok/));
+        expect(getByText('Hello test')).toBeTruthy();
+        debug();
+    });
+
+    it.only('catches server errors', async () => {
+        FetchMachine.errorRoute('TestAdapter', 'getOne', { error: 'NOT FOUND', status: 404 });
+        const { getByText, debug } = setup();
+        await waitForElement(() => getByText(/Error handled properly/));
         expect(getByText('Hello test')).toBeTruthy();
         debug();
     });

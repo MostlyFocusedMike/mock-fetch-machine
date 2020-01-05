@@ -7,7 +7,7 @@ const mockAdapters: MockAdaptersIntf = {
             ['/test/2', { body: { msg: 'test 1 val' } }],
         ],
         create: [
-            ['/test', { body: { msg: 'test 1 val' }, method: 'POST', code: 201 }],
+            ['/test', { body: { msg: 'test 1 val' }, method: 'POST', status: 201 }],
         ],
     },
 };

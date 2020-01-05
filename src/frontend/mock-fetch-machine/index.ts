@@ -2,15 +2,10 @@ import fetchMock from 'fetch-mock';
 import rawMockAdapters from './mock_adapters';
 import {
     RouteTupleType,      // eslint-disable-line no-unused-vars
-    MockAdaptersIntf, // eslint-disable-line no-unused-vars
-    defaultOptsIntf,  // eslint-disable-line no-unused-vars
+    MockAdaptersIntf,    // eslint-disable-line no-unused-vars
+    defaultOptsIntf,     // eslint-disable-line no-unused-vars
+    mockReturnValueIntf, // eslint-disable-line no-unused-vars
 } from './types';
-
-interface NewResponseIntf {
-    body?: any,
-    status?: number,
-    method?: string,
-}
 
 class FetchMachine {
     mockAdapters: MockAdaptersIntf;
@@ -51,12 +46,7 @@ class FetchMachine {
         this.setDefaultRoutes();
     };
 
-    /**
-    * copy of jest-fetch-mock where the next fetch request, regardless of route, gets mocked
-    * @param body - response value
-    * @param status - new server status code
-    * @param method - http verb
-    */
+    /** copy of jest-fetch-mock where the next fetch request, regardless of route, gets mocked */
     mockAnyOnce = (
         body: any,
         status = this.defaultOpts.status,
@@ -66,19 +56,11 @@ class FetchMachine {
         fetchMock.once('*', { body, status }, { method });
     };
 
-    /**
-     * Override a single adapter function for a single test
-     *
-     * @param mockAdapter - Name of the fake adapter
-     * @param adapterFunction - Name of the method to override
-     * @param newResponse - overide response value
-     * @param status - new server status code
-     * @param method - http verb
-     */
+    /** Override a single adapter function for a single test */
     changeRoute = (
         mockAdapter: string,
         adapterFunction: string,
-        newResponse: NewResponseIntf = {
+        newResponse: mockReturnValueIntf = {
             body: {},
             status: 200,
             method: 'GET',
@@ -98,13 +80,24 @@ class FetchMachine {
         );
     };
 
-    /**
-     * Break a single route with an unhandled error,
-     * will break render test if app doesn't handle rejected promises
-     *
-     * @param mockAdapter - Name of the adapter
-     * @param adapterFunction - Name of the function
-     */
+    errorRoute = (
+        mockAdapter: string,
+        adapterFunction: string,
+        error: any,
+        routeIdx = 0,
+    ) => {
+        const [url, { method }] = rawMockAdapters[mockAdapter][adapterFunction][routeIdx];
+        fetchMock.mock(
+            url,
+            {
+                body: error,
+                status: 400,
+            },
+            { method },
+        );
+    };
+
+    /** Break a single route with an unhandled error */
     rejectRoute = (
         mockAdapter: string,
         adapterFunction: string,

@@ -2,7 +2,15 @@ import React, { useEffect, useState } from 'react';
 
 const TestAdapter = {
     getOne: () => {
-        return fetch('/test/1').then(r => r.json());
+        return fetch('/test/1')
+            .then(r => {
+                if (r.ok) return r.json();
+                return { msg: 'Error handled properly' };
+            })
+            .catch(e => {
+                console.log(e);
+                return { msg: 'Reject has been caught' };
+            });
     },
 };
 
@@ -10,10 +18,13 @@ const TestExample: React.FC = () => {
     const [test1, setTest1] = useState<{msg: string} | null>(null);
     useEffect(() => {
         TestAdapter.getOne()
-            .then(setTest1)
+            .then(res => {
+                console.log('res: ', res);
+                setTest1(res);
+            })
             .catch((e) => {
                 console.log('Error handled');
-                setTest1({ msg: 'error ok'});
+                setTest1({ msg: 'error ok' });
             });
     }, []);
 

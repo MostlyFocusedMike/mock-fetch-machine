@@ -1,7 +1,7 @@
 type urlTp = string;
 
-interface mockReturnValueIntf {
-    body: any;
+export interface mockReturnValueIntf {
+    body?: any;
     status?: number;
     method?: string;
 }
